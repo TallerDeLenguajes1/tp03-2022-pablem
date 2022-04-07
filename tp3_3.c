@@ -30,7 +30,10 @@ int main() {
     Cliente unCliente;
     Producto unProducto;
 
+    //vector de clientes / productos
+
     buff = (char *) malloc(30*sizeof(char));
+    // buff2 = (char *) malloc(15*sizeof(char));
 
     srand((int)time(NULL));
 
@@ -49,9 +52,19 @@ int main() {
         strcpy(unCliente.NombreCliente, buff);
 
         //cantidad de productos:
-        unCliente.CantidadProductosAPedir = rand() % 5 + 1; 
+        unCliente.CantidadProductosAPedir = rand()%5 + 1; 
 
         /* Producto */
+        for (int j = 0; j < unCliente.CantidadProductosAPedir; j++) {
+            
+            unProducto.ProductoID = j;
+            unProducto.Cantidad = rand()%10 + 1;
+            buff = TiposProductos[rand()%5+1];
+            unProducto.TipoProducto = (char *) malloc((strlen(buff)+1)*sizeof(char));
+            strcpy(unProducto.TipoProducto, buff);
+            unProducto.PrecioUnitario = (rand()%9001+1000)/100;//---> probar
+        }
+        // unCliente.Productos = 
         
 
     }
