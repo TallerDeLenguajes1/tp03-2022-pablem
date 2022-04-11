@@ -17,7 +17,7 @@ int main() {
 
         printf("%d) Ingrese un nombre: ", i+1);
         gets(Buff);
-        vector[i] = (char *) malloc((strlen(Buff)+1)*sizeof(char));
+        vector[i] = (char *) malloc((strlen(Buff))*sizeof(char));
         strcpy(vector[i], Buff);
     }
     free(Buff);
