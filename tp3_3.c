@@ -26,59 +26,61 @@ int main() {
     srand((int)time(NULL));
     rand();
 
-    int n, nProd;
+    int nClientes, nProductos;
     char *buffNombre; 
-    Producto unProducto, *vectorProductos;////////**?
-    Cliente  unCliente , *vectorClientes;
+    Producto *vectorProductos;
+    Cliente  *vectorClientes;
+
+    buffNombre = (char *) malloc(32*sizeof(char));
 
     printf("\nIngrese la cantidad de clientes: ");
-    scanf("%d", &n);
-    buffNombre = (char *) malloc(30*sizeof(char));
-    vectorClientes = (Cliente *) malloc(n*sizeof(Cliente));
+    scanf("%d", &nClientes);
 
-    for (int i = 0; i < n; i++) {
+    vectorClientes = (Cliente *) malloc(nClientes*sizeof(Cliente));
+
+    for (int i = 0; i < nClientes; i++) {
         
         //id cliente:
-        unCliente.ClienteID = i;
+        vectorClientes[i].ClienteID = i;
+
         //nombre cliente:
         printf("%d) Nombre del cliente: ", i+1);
         fflush(stdin);
         gets(buffNombre);
-        unCliente.NombreCliente = (char *) malloc((strlen(buffNombre)+1)*sizeof(char));
-        strcpy(unCliente.NombreCliente, buffNombre);
+        vectorClientes[i].NombreCliente = (char *) malloc((strlen(buffNombre)+1)*sizeof(char));
+        strcpy(vectorClientes[i].NombreCliente, buffNombre);
+
         //cantidad de productos:
-        unCliente.CantidadProductosAPedir = rand()%5 + 1; 
-        nProd = unCliente.CantidadProductosAPedir;
+        vectorClientes[i].CantidadProductosAPedir = rand()%5 + 1; 
+        nProductos = vectorClientes[i].CantidadProductosAPedir;
 
         /*** Producto *******/
-        vectorProductos = (Producto *) malloc(nProd*sizeof(Producto));
-        for (int j = 0; j < nProd; j++) {
+        vectorProductos = (Producto *) malloc(nProductos*sizeof(Producto));
 
-            unProducto.ProductoID = j;//id
-            unProducto.Cantidad = rand()%10 + 1;//cantidad
-            unProducto.TipoProducto = TiposProductos[rand()%5];//tipo
-            unProducto.PrecioUnitario = (rand()%9001+(float)1000)/100;//--->(de 0 a 9.000 + 1.000)/100
-            *(vectorProductos+j) = unProducto;
+        for (int j = 0; j < nProductos; j++) {
+
+            vectorProductos[j].ProductoID = j;//id
+            vectorProductos[j].Cantidad = rand()%10 + 1;//cantidad
+            vectorProductos[j].TipoProducto = TiposProductos[rand()%5];//tipo
+            vectorProductos[j].PrecioUnitario = (rand()%9001+(float)1000)/100;//--->(de 0 a 9.000 + 1.000)/100
         }
-        unCliente.Productos = vectorProductos;
+        vectorClientes[i].Productos = vectorProductos;
         /*** fin Producto ***/
-
-        *(vectorClientes+i) = unCliente;
     }
-    free(buffNombre);
 
+    ///FUNCION MOSTRAR TODOS LOS CLIENTES Y PRODUCTOS
     int idC, idP, cantidad, unidades;      
     char *nombre, *tipo;
     float precio;
 
     printf("\n");
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < nClientes; i++) {
 
         idC      = vectorClientes[i].ClienteID;
         nombre   = vectorClientes[i].NombreCliente; 
         cantidad = vectorClientes[i].CantidadProductosAPedir; 
 
-        printf("--- Cliente %d - %s - %d productos ---\n", idC+1, nombre, cantidad);
+        printf("------ Cliente %d, %s, %d producto/s ------\n", idC+1, nombre, cantidad);
 
         for (int j = 0; j < cantidad; j++) {
             
@@ -92,20 +94,17 @@ int main() {
         printf("\n");
     }
 
+    ////FUNCION LIBERAR MEMORIA DINAMICA
+
+    for (int i = 0; i < nClientes; i++) {
+        
+        free(vectorClientes[i].Productos);
+        free(vectorClientes[i].NombreCliente);
+    }
+
+    free(buffNombre);
     free(vectorProductos);
     free(vectorClientes);
 
-    // for (int i = 0; i < n; i++) {
-
-    //     for (int j = 0; j < cantidad; j++) {
-            
-    //         free(vectorProductos+i);
-    //     }
-    // }
-
-    
-    
-    
-    
     return 0;
 }
