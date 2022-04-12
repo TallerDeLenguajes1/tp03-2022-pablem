@@ -23,75 +23,85 @@ typedef struct {
 
 int main() {
 
-    int nClientes;
+    srand((int)time(NULL));
+    rand();
+
+    int n, nProd;
     char *buffNombre; 
-    Producto unProducto, *vectorProductos;
+    Producto unProducto, *vectorProductos;////////**?
     Cliente  unCliente , *vectorClientes;
 
-    // int idC, idP, cantidad, unidades;      
-    // char *nombre, *tipo;
-    // float precio;
-
-    buffNombre = (char *) malloc(30*sizeof(char));
-    vectorProductos = (Producto *) malloc(5*sizeof(Producto));
-    vectorClientes = (Cliente *) malloc(5*sizeof(Cliente));
-    srand((int)time(NULL));
-
     printf("\nIngrese la cantidad de clientes: ");
-    scanf("%d", nClientes);
+    scanf("%d", &n);
+    buffNombre = (char *) malloc(30*sizeof(char));
+    vectorClientes = (Cliente *) malloc(n*sizeof(Cliente));
 
-    for (int i = 0; i < nClientes; i++) {
+    for (int i = 0; i < n; i++) {
         
         //id cliente:
         unCliente.ClienteID = i;
         //nombre cliente:
         printf("%d) Nombre del cliente: ", i+1);
+        fflush(stdin);
         gets(buffNombre);
         unCliente.NombreCliente = (char *) malloc((strlen(buffNombre)+1)*sizeof(char));
         strcpy(unCliente.NombreCliente, buffNombre);
         //cantidad de productos:
         unCliente.CantidadProductosAPedir = rand()%5 + 1; 
+        nProd = unCliente.CantidadProductosAPedir;
 
         /*** Producto *******/
-        for (int j = 0; j < unCliente.CantidadProductosAPedir; j++) {
-            
+        vectorProductos = (Producto *) malloc(nProd*sizeof(Producto));
+        for (int j = 0; j < nProd; j++) {
+
             unProducto.ProductoID = j;//id
             unProducto.Cantidad = rand()%10 + 1;//cantidad
-            unProducto.TipoProducto = TiposProductos[rand()%5+1];//tipo
-            unProducto.PrecioUnitario = (rand()%9001+1000)/100;//--->(de 0 a 9.000 + 1.000)/100
-            vectorProductos[j] = unProducto;
+            unProducto.TipoProducto = TiposProductos[rand()%5];//tipo
+            unProducto.PrecioUnitario = (rand()%9001+(float)1000)/100;//--->(de 0 a 9.000 + 1.000)/100
+            *(vectorProductos+j) = unProducto;
         }
         unCliente.Productos = vectorProductos;
         /*** fin Producto ***/
 
-        vectorClientes[i] = unCliente;
+        *(vectorClientes+i) = unCliente;
     }
     free(buffNombre);
-    // free(vectorProductos);
 
+    int idC, idP, cantidad, unidades;      
+    char *nombre, *tipo;
+    float precio;
 
+    printf("\n");
+    for (int i = 0; i < n; i++) {
 
-    // printf("\n");
-    // for (int i = 0; i < nClientes; i++) {
+        idC      = vectorClientes[i].ClienteID;
+        nombre   = vectorClientes[i].NombreCliente; 
+        cantidad = vectorClientes[i].CantidadProductosAPedir; 
 
-    //     idC      = vectorClientes[i].ClienteID;
-    //     nombre   = vectorClientes[i].NombreCliente; 
-    //     cantidad = vectorClientes[i].CantidadProductosAPedir; 
+        printf("--- Cliente %d - %s - %d productos ---\n", idC+1, nombre, cantidad);
 
-    //     printf("--- Cliente %d - %s - %d productos ---\n", idC, nombre, cantidad);
+        for (int j = 0; j < cantidad; j++) {
+            
+            idP      = vectorClientes[i].Productos[j].ProductoID;
+            unidades = vectorClientes[i].Productos[j].Cantidad;
+            tipo     = vectorClientes[i].Productos[j].TipoProducto;
+            precio   = vectorClientes[i].Productos[j].PrecioUnitario;
+
+            printf("\t%d) %s:\t%d x $%.2f\n", j+1, tipo, unidades, precio);
+        }
+        printf("\n");
+    }
+
+    free(vectorProductos);
+    free(vectorClientes);
+
+    // for (int i = 0; i < n; i++) {
 
     //     for (int j = 0; j < cantidad; j++) {
             
-    //         idP      = vectorClientes[i].Productos[j].ProductoID;
-    //         unidades = vectorClientes[i].Productos[j].Cantidad;
-    //         tipo     = vectorClientes[i].Productos[j].TipoProducto;
-    //         precio   = vectorClientes[i].Productos[j].PrecioUnitario;
-
-    //         printf("\t%d) %s: %d x $%.2f\n", i+1, tipo, unidades, precio);
+    //         free(vectorProductos+i);
     //     }
-    //     printf("\n");
     // }
-
 
     
     
